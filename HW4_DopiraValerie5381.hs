@@ -33,3 +33,17 @@ sum x = (x `mod` 10) + sum (x `div` 10)
 size :: Integer -> Integer -> Integer
 size n | (n<10) = 1
        | otherwise = 1 + size (n `div` 10) 10
+
+{-5-}
+f :: (a -> a) -> Int -> (a -> a)
+ntimes f g n
+    | n <= 0     = error "n must be positive number"
+    | otherwise = ntimes g (f g (n - 1))
+
+{-6-}
+fibonacci :: Integer -> Integer
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
+lastDigit :: Integer->Integer
+lastDigit n = mod (fibonacci n) 10
