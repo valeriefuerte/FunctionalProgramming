@@ -47,3 +47,11 @@ fibonacci 1 = 1
 fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
 lastDigit :: Integer->Integer
 lastDigit n = mod (fibonacci n) 10
+
+{-7-}
+isPalindrom :: String -> Bool
+isPalindrome xs = xs == (reverse xs)
+isPalindrom [] = True
+isPalindrome [x] = True
+isPalindrome (x:xs) | toLower x == toLower (last xs) = isPalindrome (init xs)
+		    		| otherwise = False
