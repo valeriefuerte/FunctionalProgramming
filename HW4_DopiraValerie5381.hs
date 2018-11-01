@@ -17,4 +17,19 @@ curry_ f a b = f (a, b)
 associate :: (a, (b, c)) -> ((a, b), c)
 associate (a, (b, c)) = ((a, b), c)
 
-main = putStrLn "Everything is okey!"
+{-2-}
+minMax :: Ord a => [a] -> Maybe (a, a)
+minMax xs = foldr go id xs Nothing where
+  go x r Nothing = r (Just (x, x))
+  go x r mnmx@(Just (minimum, maximum))
+    | x < minimum = r (Just (x, maximum))
+    | maximum < x = r (Just (minimum, x))
+    | otherwise = r mnmx
+
+{-3-}
+sum :: Integer -> Integer -> Integer
+sum 0 = 0
+sum x = (x `mod` 10) + sum (x `div` 10)
+size :: Integer -> Integer -> Integer
+size n | (n<10) = 1
+       | otherwise = 1 + size (n `div` 10) 10
