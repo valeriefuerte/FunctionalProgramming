@@ -1,3 +1,9 @@
+module FP4 where
+
+import Data.Maybe
+import Data.List
+import Data.Char
+
 {-1.1-}
 id_ :: a -> a
 id_ x = x
@@ -27,31 +33,43 @@ minMax xs = foldr go id xs Nothing where
     | otherwise = r mnmx
 
 {-3-}
-sum :: Integer -> Integer -> Integer
-sum 0 = 0
-sum x = (x `mod` 10) + sum (x `div` 10)
-size :: Integer -> Integer -> Integer
-size n | (n<10) = 1
-       | otherwise = 1 + size (n `div` 10) 10
+size :: Integer -> Integer
+size x = let y = abs(x) `div` 10
+    in if y == 0 then 1 else size(y) + 1
+
+{-4-}
+major_item :: Eq a => [a] -> Maybe(a) -> Int -> Maybe(a)
+major_item x cand conf =
+    if null x
+        then if conf > 0
+            then cand
+            else Nothing
+        else if conf == 0
+            then major_item (tail x) (Just (head x)) 1
+            else if cand == Just(head x)
+                then major_item (tail x) cand (conf+1)
+                else major_item (tail x) cand (conf-1)
+
+majority :: Eq a => [a] -> Maybe(a)
+majority x = major_item x Nothing 0
 
 {-5-}
 f :: (a -> a) -> Int -> (a -> a)
-ntimes f g n
-    | n <= 0     = error "n must be positive number"
-    | otherwise = ntimes g (f g (n - 1))
+f g n 
+    | n > 1 = \x -> (f g (n-1)) $ g x
+    | n == 1 = \x -> g x
+    | otherwise = error "n must be positive number"
 
 {-6-}
 fibonacci :: Integer -> Integer
 fibonacci 0 = 0
 fibonacci 1 = 1
-fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
-lastDigit :: Integer->Integer
-lastDigit n = mod (fibonacci n) 10
+fibonacci n = (fibonacci(n-2) + fibonacci(n-1)) `mod` 10
 
 {-7-}
-isPalindrom :: String -> Bool
-isPalindrome xs = xs == (reverse xs)
-isPalindrom [] = True
+isPalindrome :: String -> Bool
+isPalindrome [] = True
 isPalindrome [x] = True
-isPalindrome (x:xs) | toLower x == toLower (last xs) = isPalindrome (init xs)
-		    		| otherwise = False
+isPalindrome (x:xs) = if toUpper(x) /= toUpper(last xs)
+        then False
+        else isPalindrome(init xs)
