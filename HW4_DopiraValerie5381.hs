@@ -36,6 +36,14 @@ minMax xs = foldr go id xs Nothing where
 size :: Integer -> Integer
 size x = let y = abs(x) `div` 10
     in if y == 0 then 1 else size(y) + 1
+miterate :: (a -> Maybe (a, b)) -> a -> [b]
+miterate f = go . f where
+    go Nothing = []
+    go (Just (x, y)) = y : (go (f x))
+sumd :: Integer -> Integer
+sumd = sum . miterate f where
+    f 0 = Nothing
+    f x = Just (x `divMod` 10)
 
 {-4-}
 major_item :: Eq a => [a] -> Maybe(a) -> Int -> Maybe(a)
